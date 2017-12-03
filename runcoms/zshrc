@@ -62,10 +62,6 @@ setopt EXTENDED_GLOB
 # hows about arrays be awesome?  (that is, frew${cool}frew has frew surrounding all the variables, not just first and last
 setopt RC_EXPAND_PARAM
 
-# NVM
-export NVM_DIR="$HOME/.nvm"
-. "/usr/local/opt/nvm/nvm.sh"
-
 # Aliases
 alias git=hub
 alias g="git"
@@ -95,6 +91,9 @@ export MANPAGER="less -X"
 export LS_COLORS='di=1;34:ln=35:so=32:pi=0;33:ex=32:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=1;34:ow=1;34:'
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+
+#PHP
+export PATH=$PATH:$HOME/.composer/vendor/bin
 
 # Who doesn't want home and end to work?
 bindkey '\e[1~' beginning-of-line
@@ -138,3 +137,11 @@ if [ -f '/usr/local/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/us
 export CLOUDSDK_PYTHON=/usr/bin/python
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+export PATH="$HOME/.yarn/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+alias node='unalias node ; unalias npm ; nvm use default ; node $@'
+alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
