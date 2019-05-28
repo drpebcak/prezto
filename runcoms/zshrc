@@ -6,6 +6,7 @@
 #
 
 # Source Prezto.
+# shellcheck source=/dev/null
 if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
@@ -21,17 +22,15 @@ bindkey "^I" expand-or-complete-with-dots
 # Customize to your needs...
 
 #DEFAULT_USER='tprice'
-
 # Source local sensitive exports
+# shellcheck source=/dev/null
 source ~/.zlocalenv
-
-# Configure chruby
-source /usr/local/opt/chruby/share/chruby/chruby.sh
-chruby ruby-2.3.1
-source /usr/local/opt/chruby/share/chruby/auto.sh
 
 # Add homebrew to the completion path
 fpath=("/usr/local/bin/" $fpath)
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
 # Advanced autocomplete
 autoload -U compinit && compinit -i
 
@@ -63,21 +62,25 @@ setopt EXTENDED_GLOB
 setopt RC_EXPAND_PARAM
 
 # Aliases
-alias git=hub
+eval "$(hub alias -s)"
 alias g="git"
 alias pull='git pull'
 alias push='git push'
 alias status='git status'
 alias sort=gsort
-alias ls='gls --color=always'
+#alias ls='gls --color=always'
+alias ls='exa'
 alias grep="grep --color=always"
 alias egrep="egrep --color=always"
-alias lslsa='gls -lsa'
-alias lsl='gls -l'
-alias lsld='gls -ld'
-alias lah='gls -lah'
+alias lslsa='ls -lsa'
+alias lsl='ls -l'
+alias lsld='ls -ld'
+alias lah='ls -lah'
 
-export EDITOR="/usr/local/bin/mate -w"
+# kubectl
+alias k='kubectl'
+
+export EDITOR="/usr/bin/vi"
 export HISTSIZE=32768
 export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
@@ -91,9 +94,6 @@ export MANPAGER="less -X"
 export LS_COLORS='di=1;34:ln=35:so=32:pi=0;33:ex=32:bd=34;46:cd=34;43:su=0;41:sg=0;46:tw=1;34:ow=1;34:'
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
-
-#PHP
-export PATH=$PATH:$HOME/.composer/vendor/bin
 
 # Who doesn't want home and end to work?
 bindkey '\e[1~' beginning-of-line
@@ -118,16 +118,17 @@ bindkey "[D" backward-word
 # it's like, space AND completion.  Gnarlbot.
 bindkey -M viins ' ' magic-space
 
-zman() {
-  PAGER="less -g -s '+/^       "$1"'" man zshall
-}
-
 eval "$(direnv hook zsh)"
-eval `gdircolors -b ~/.dircolors`
+eval "$(gdircolors -b ~/.dircolors)"
 eval "$(thefuck --alias)"
 
+# https://sig.gy/itermkube/
+function iterm2_print_user_vars() {
+  iterm2_set_user_var kubecontext "$(kubectl config current-context)"
+}
+# shellcheck source=/dev/null
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-source /usr/local/share/zsh/site-functions/_awless
+#source /usr/local/share/zsh/site-functions/_awless
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/usr/local/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/usr/local/bin/google-cloud-sdk/path.zsh.inc'; fi
@@ -136,12 +137,22 @@ if [ -f '/usr/local/bin/google-cloud-sdk/path.zsh.inc' ]; then source '/usr/loca
 if [ -f '/usr/local/bin/google-cloud-sdk/completion.zsh.inc' ]; then source '/usr/local/bin/google-cloud-sdk/completion.zsh.inc'; fi
 export CLOUDSDK_PYTHON=/usr/bin/python
 
+# shellcheck source=/dev/null
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-export PATH="$HOME/.yarn/bin:$PATH"
+export PATH="$HOME/.yarn/bin:$PATH:/Users/tprice/Library/Python/3.7/bin"
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-alias node='unalias node ; unalias npm ; nvm use default ; node $@'
-alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
+#export NVM_DIR="$HOME/.nvm"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" --no-use # This loads nvm
+#[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+#alias node='unalias node ; unalias npm ; nvm use default ; node $@'
+#alias npm='unalias node ; unalias npm ; nvm use default ; npm $@'
+
+function gobin() {
+  command="$1"
+  shift
+  args="$*"
+  eval "${GOPATH}/bin/${command} ${args}"
+}
+
+source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
