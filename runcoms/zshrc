@@ -28,6 +28,8 @@ source ~/.zlocalenv
 
 # Add homebrew to the completion path
 fpath=("/usr/local/bin/" $fpath)
+# Add extra completions
+fpath=(/usr/local/share/zsh-completions $fpath)
 if type brew &>/dev/null; then
   FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
 fi
@@ -66,6 +68,7 @@ eval "$(hub alias -s)"
 alias g="git"
 alias pull='git pull'
 alias push='git push'
+alias pushf='git push --force-with-lease'
 alias status='git status'
 alias sort=gsort
 #alias ls='gls --color=always'
@@ -122,10 +125,6 @@ eval "$(direnv hook zsh)"
 eval "$(gdircolors -b ~/.dircolors)"
 eval "$(thefuck --alias)"
 
-# https://sig.gy/itermkube/
-function iterm2_print_user_vars() {
-  iterm2_set_user_var kubecontext "$(kubectl config current-context)"
-}
 # shellcheck source=/dev/null
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 #source /usr/local/share/zsh/site-functions/_awless
