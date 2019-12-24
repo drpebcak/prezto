@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+#
+
+if ! hash jq 2>/dev/null; then
+  echo "jq is required"
+  exit 1
+fi
+
+if [ -z "${GITLAB_ROOT_GROUP_NAME}" ]; then
+  echo 'GITLAB_ROOT_GROUP_NAME is empty'
+  exit 1
+fi
+
+# Base URL of gitlab installation
+GITLAB_URL="https://gitlab.com"
+
+# Get pagination info
+TOTAL_PAGES=$(curl --head -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true" | grep "X-Total-Pages:" | cut -d ":" -f 2 | tr -d ' ' | tr -d '\r' | tr -d '\n')
+
+# Get list of repos to clone
+declare -a REPOS_TO_CLONE
+i=1
+OLDIFS="$IFS"
+IFS=$'\n'
+while [ "${i}" -le "${TOTAL_PAGES}" ]; do
+  # shellcheck disable=SC2207
+  REPOS_TO_CLONE=($(for R in "${REPOS_TO_CLONE[@]}" "$(curl -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true&page=${i}" | jq -r '.[] | .ssh_url_to_repo')"; do echo "${R}"; done | sort -du))
+  ((i++))
+done
+IFS="$OLDIFS"
+
+# Get down to business, make directories and clone repos
+for j in "${REPOS_TO_CLONE[@]}"; do
+  REPO_PATH=$(echo "${j}" | cut -d : -f2 | sed 's/\.git//g')
+
+  # shellcheck disable=SC2001
+  DIR_PATH=$(echo "${REPO_PATH}" | sed 's|\(.*\)/.*|\1|')
+
+  # Make directories if they don't already exist
+  if [ ! -d "$(pwd)/${DIR_PATH}" ]; then
+    echo "mkdir -p $(pwd)/${DIR_PATH}"
+    mkdir -p "$(pwd)/${DIR_PATH}"
+  fi
+
+  # Clone or update repos
+  if [ ! -d "$(pwd)/${REPO_PATH}" ]; then
+    git clone "${j}" "$(pwd)/${REPO_PATH}"
+  else
+    echo "Already cloned, updating..."
+    echo "${REPO_PATH}"
+    cd "$(pwd)/${REPO_PATH}" || return
+    CURRENT_BRANCH=$(git status | grep -e "On" | awk '{print $3}')
+    git stash                        # Stashing Commits
+    git checkout master              # Switch to Master Branch
+    git fetch --all                  # Fetch All Changes
+    git pull                         # Updating Master
+    git checkout "${CURRENT_BRANCH}" # Checkout Branch was on before switching to master
+    git stash pop                    # Pop the Stashed Commit
+    echo "You might want to rebase!"
+    cd - >/dev/null || return
+  fi
+done
