@@ -8,3 +8,6 @@ ln -s ~/.zprezto/runcoms/zpreztorc ~/.zpreztorc
 ln -s ~/.zprezto/runcoms/zshrc ~/.zshrc
 ln -s ~/.zprezto/runcoms/.gitconfig ~/.gitconfig
 ln -s ~/.zprezto/runcoms/hammerspoon ~/.hammerspoon
+
+# Sync helper scripts
+ln -s ~/.zprezto/runcoms/scripts/gitlab-repo-sync /usr/local/bin/gitlab-repo-sync
