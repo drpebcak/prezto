@@ -11,3 +11,4 @@ ln -s ~/.zprezto/runcoms/.gitconfig ~/.gitconfig
 
 # Sync helper scripts
 ln -s ~/.zprezto/runcoms/scripts/gitlab-repo-sync /usr/local/bin/gitlab-repo-sync
+ln -s ~/.zprezto/runcoms/scripts/build-ansible-reqs /usr/local/bin/build-ansible-reqs
