@@ -1,0 +1,5 @@
+#!/bin/bash
+vault="${OP_VAULT_UUID}"
+name=${1}
+
+op get item --vault=${vault} ${name} | jq -r .uuid | tee /dev/tty | tr -d '\n' | pbcopy

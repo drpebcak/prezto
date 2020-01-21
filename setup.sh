@@ -8,7 +8,7 @@ ln -s ~/.zprezto/runcoms/zpreztorc ~/.zpreztorc
 ln -s ~/.zprezto/runcoms/zshrc ~/.zshrc
 ln -s ~/.zprezto/runcoms/.gitconfig ~/.gitconfig
 
-
 # Sync helper scripts
 ln -s ~/.zprezto/runcoms/scripts/gitlab-repo-sync /usr/local/bin/gitlab-repo-sync
 ln -s ~/.zprezto/runcoms/scripts/build-ansible-reqs /usr/local/bin/build-ansible-reqs
+ln -s ~/.zprezto/runcoms/scripts/op-get-uuid /usr/local/bin/op-get-uuid
