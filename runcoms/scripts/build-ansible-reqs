@@ -6,6 +6,7 @@ do
     cd "${i}" || exit 1;
     roleName=$(echo $i | sed "s|${base_dir}/ansible/||")
     #echo "roleName: ${roleName}"
+    git fetch --all --tags > /dev/null
     gitTag=$(git describe --tags $(git rev-list --tags --max-count=1))
 
     echo -en "- src: git@gitlab.com:gpsi/ansible/$roleName\\n"
