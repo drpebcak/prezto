@@ -92,6 +92,8 @@ alias cat="bat"
 
 # kubectl
 alias k='kubectl'
+alias kns='kubens'
+alias kctx='kubectx'
 
 export EDITOR="/usr/bin/vi"
 export HISTSIZE=32768
