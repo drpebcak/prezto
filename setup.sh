@@ -12,3 +12,4 @@ ln -s ~/.zprezto/runcoms/.gitconfig ~/.gitconfig
 ln -s ~/.zprezto/runcoms/scripts/gitlab-repo-sync /usr/local/bin/gitlab-repo-sync
 ln -s ~/.zprezto/runcoms/scripts/build-ansible-reqs /usr/local/bin/build-ansible-reqs
 ln -s ~/.zprezto/runcoms/scripts/op-get-uuid /usr/local/bin/op-get-uuid
+ln -s ~/.zprezto/runcoms/scripts/git-rebase /usr/local/bin/git-rebase
