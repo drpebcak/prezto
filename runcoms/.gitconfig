@@ -88,3 +88,8 @@
 	old = red bold
 	new = green bold
 	whitespace = red reverse
+
+[url "git@bitbucket.org:"]
+	insteadOf = https://bitbucket.org/
+[url "git@gitlab.com:"]
+    insteadOf = https://gitlab.com/
