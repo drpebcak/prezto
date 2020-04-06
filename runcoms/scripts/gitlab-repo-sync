@@ -15,7 +15,7 @@ fi
 GITLAB_URL="https://gitlab.com"
 
 # Get pagination info
-TOTAL_PAGES=$(curl --head -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true" | grep "X-Total-Pages:" | cut -d ":" -f 2 | tr -d ' ' | tr -d '\r' | tr -d '\n')
+TOTAL_PAGES=$(curl --head -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true" | grep -i "X-Total-Pages:" | cut -d ":" -f 2 | tr -d ' ' | tr -d '\r' | tr -d '\n')
 
 # Get list of repos to clone
 declare -a REPOS_TO_CLONE
