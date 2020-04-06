@@ -170,3 +170,9 @@ if [ -f '/usr/local/google-cloud-sdk/path.zsh.inc' ]; then . '/usr/local/google-
 # The next line enables shell command completion for gcloud.
 if [ -f '/usr/local/google-cloud-sdk/completion.zsh.inc' ]; then . '/usr/local/google-cloud-sdk/completion.zsh.inc'; fi
 # zprof
+
+# start s5cmd -- Lines below are added by s5cmd -cmp-install
+# To automatically uninstall, do not remove these comments and run s5cmd -cmp-uninstall
+_s5cmd_completer() { read -l; local cl="$REPLY"; read -ln; local cp="$REPLY"; reply=(`COMP_SHELL=zsh COMP_LINE="$cl" COMP_POINT="$cp" /usr/local/bin/s5cmd`) }
+compctl -K _s5cmd_completer s5cmd
+# end s5cmd
