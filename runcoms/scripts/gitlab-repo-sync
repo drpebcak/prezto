@@ -24,8 +24,7 @@ OLDIFS="$IFS"
 IFS=$'\n'
 while [ "${i}" -le "${TOTAL_PAGES}" ]; do
   # shellcheck disable=SC2207
-  REPOS_TO_CLONE=($(for R in "${REPOS_TO_CLONE[@]}" "$(curl -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true&page=${i}" | jq -r '.[] | .ssh_url_to_repo')"; do echo "${R}"; done | sort -du))
-  ((i++))
+  REPOS_TO_CLONE=($(for R in "${REPOS_TO_CLONE[@]}" "$(curl -s --header "PRIVATE-TOKEN: ${GPSI_GITLAB_ADMIN_TOKEN}" "${GITLAB_URL}/api/v4/groups/${GITLAB_ROOT_GROUP_NAME}/projects?per_page=100&include_subgroups=true&page=${i}" | jq -r '.[] | select(.archived==false) | .ssh_url_to_repo')"; do echo "${R}"; done | sort -du))
 done
 IFS="$OLDIFS"
 
