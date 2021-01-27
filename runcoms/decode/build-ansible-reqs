@@ -1,16 +1,17 @@
-#!/usr/local/bin/zsh
+#!/bin/bash
 base_dir="/srv/gpsi"
 IFS=$'\n'
-for i in $(find "${base_dir}" -name ".git" -type d | sed 's/\/\.git//g' | sed 's/^\.\/\//\//g' | sort -u | grep -e "cookiecutter" -v | grep "${base_dir}/ansible" | grep "role-"); do
-    cd "${i}" || exit 1
+for i in $(find "${base_dir}" -name ".git" -type d | sed 's/\/\.git//g' | sed 's/^\.\/\//\//g' | sort -u | grep -e "cookiecutter" -v |grep "${base_dir}/ansible" |grep "role-");
+do
+    cd "${i}" || exit 1;
     roleName=$(echo $i | sed "s|${base_dir}/ansible/||")
     #echo "roleName: ${roleName}"
-    git fetch --all --tags >/dev/null
+    git fetch --all --tags > /dev/null
     gitTag=$(git describe --tags $(git rev-list --tags --max-count=1))
 
     echo -en "- src: git@gitlab.com:gpsi/ansible/$roleName\\n"
     echo -en "  scm: git\\n"
     echo -en "  name: $(echo "$roleName" | cut -d '-' -f2-)\\n"
     echo -en "  version: $gitTag\\n"
-    cd - >/dev/null || return
+    cd - > /dev/null || return;
 done

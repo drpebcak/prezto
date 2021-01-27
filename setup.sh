@@ -15,3 +15,4 @@ ln -s ~/.zprezto/runcoms/scripts/build-ansible-reqs /usr/local/bin/build-ansible
 ln -s ~/.zprezto/runcoms/scripts/op-get-uuid /usr/local/bin/op-get-uuid
 ln -s ~/.zprezto/runcoms/scripts/git-rebase /usr/local/bin/git-rebase
 ln -s ~/.zprezto/runcoms/scripts/git-clean-branches /usr/local/bin/git-clean-branches
+ln -s ~/.zprezto/runcoms/scripts/decode /usr/local/bin/decode

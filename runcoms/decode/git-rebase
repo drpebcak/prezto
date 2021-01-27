@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/usr/bin/env bash
 #
 
 CURRENT_BRANCH=$(git status | grep -e "On" | awk '{print $3}')
